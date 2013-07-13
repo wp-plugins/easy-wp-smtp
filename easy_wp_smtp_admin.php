@@ -20,6 +20,7 @@ function easy_wp_smtp_options_page()
         $ewpsOptions["smtpauth"] = trim($_POST['easy_wp_smtp_smtpauth']);
         $ewpsOptions["username"] = trim($_POST['easy_wp_smtp_username']);
         $ewpsOptions["password"] = trim($_POST['easy_wp_smtp_password']);
+        $ewpsOptions["debug"] = (isset($_POST['easy_wp_smtp_enable_debug'])) ? trim($_POST['easy_wp_smtp_enable_debug']) : "";
         $ewpsOptions["deactivate"] = (isset($_POST['easy_wp_smtp_deactivate'])) ? trim($_POST['easy_wp_smtp_deactivate']) : "";
         update_option("easy_wp_smtp_options",$ewpsOptions);
         if(!is_email($ewpsOptions["from"])){
@@ -193,6 +194,17 @@ Easy WP SMTP v<?php echo EASY_WP_SMTP_PLUGIN_VERSION; ?>
                         <p>The password that you use to login to your mail server</p>
 		</td>
 	</tr>
+    <tr valign="top">
+        <th scope="row">
+            Enable SMTP Debug
+        </th>
+        <td>
+            <label>
+                <input type="checkbox" name="easy_wp_smtp_enable_debug" value="yes" <?php if($ewpsOptions["debug"]=='yes') echo 'checked="checked"'; ?> />
+                If enabled the SMTP debug output will be printed on the screen. This option is very useful if you are having issues with sending emails.
+            </label>
+        </td>
+    </tr>
         <!--
 	<tr valign="top">
 		<th scope="row">

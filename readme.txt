@@ -3,8 +3,8 @@ Contributors: wpecommerce
 Donate link: http://wp-ecommerce.net/?p=2197
 Tags: mail, wordpress smtp, phpmailer, smtp, wp_mail, email, gmail, outgoing mail, privacy, security, sendmail, ssl, tls, wp-phpmailer, mail smtp, wp smtp
 Requires at least: 3.0
-Tested up to: 3.5.2
-Stable tag: 1.0.3
+Tested up to: 3.6
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,9 @@ For screenshots please visit the [Easy WordPress SMTP](http://wp-ecommerce.net/e
 
 = 1.0.3 =
 * Added a new option to the settings which allows a user to enable/disable SMTP debug
+
+= 1.0.4 =
+* Plugin is now compatible with WordPress 3.6
 
 == Upgrade Notice ==
 none

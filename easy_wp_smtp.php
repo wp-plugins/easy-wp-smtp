@@ -1,13 +1,13 @@
 <?php
 /*
 Plugin Name: Easy WP SMTP
-Version: 1.0.3
+Version: 1.0.4
 Plugin URI: http://wp-ecommerce.net/?p=2197
 Author: wpecommerce
 Author URI: http://wp-ecommerce.net/
 Description: Send email via SMTP from your WordPress Blog
 */
-define('EASY_WP_SMTP_PLUGIN_VERSION', "1.0.3");
+define('EASY_WP_SMTP_PLUGIN_VERSION', "1.0.4");
 $ewpsOptions = get_option("easy_wp_smtp_options");
 
 function easy_wp_smtp($phpmailer){

@@ -12,14 +12,14 @@ function easy_wp_smtp_options_page()
     if(isset($_POST['easy_wp_smtp_update']))
     {
         $ewpsOptions = array();
-        $ewpsOptions["from"] = trim($_POST['easy_wp_smtp_from']);
-        $ewpsOptions["fromname"] = trim($_POST['easy_wp_smtp_fromname']);
-        $ewpsOptions["host"] = trim($_POST['easy_wp_smtp_host']);
+        $ewpsOptions["from"] = trim(stripslashes($_POST['easy_wp_smtp_from']));
+        $ewpsOptions["fromname"] = trim(stripslashes($_POST['easy_wp_smtp_fromname']));
+        $ewpsOptions["host"] = trim(stripslashes($_POST['easy_wp_smtp_host']));
         $ewpsOptions["smtpsecure"] = trim($_POST['easy_wp_smtp_smtpsecure']);
-        $ewpsOptions["port"] = trim($_POST['easy_wp_smtp_port']);
+        $ewpsOptions["port"] = trim(stripslashes($_POST['easy_wp_smtp_port']));
         $ewpsOptions["smtpauth"] = trim($_POST['easy_wp_smtp_smtpauth']);
-        $ewpsOptions["username"] = trim($_POST['easy_wp_smtp_username']);
-        $ewpsOptions["password"] = trim($_POST['easy_wp_smtp_password']);
+        $ewpsOptions["username"] = trim(stripslashes($_POST['easy_wp_smtp_username']));
+        $ewpsOptions["password"] = trim(stripslashes($_POST['easy_wp_smtp_password']));
         $ewpsOptions["debug"] = (isset($_POST['easy_wp_smtp_enable_debug'])) ? trim($_POST['easy_wp_smtp_enable_debug']) : "";
         $ewpsOptions["deactivate"] = (isset($_POST['easy_wp_smtp_deactivate'])) ? trim($_POST['easy_wp_smtp_deactivate']) : "";
         update_option("easy_wp_smtp_options",$ewpsOptions);

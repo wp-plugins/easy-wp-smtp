@@ -3,8 +3,8 @@ Contributors: wpecommerce
 Donate link: http://wp-ecommerce.net/?p=2197
 Tags: mail, wordpress smtp, phpmailer, smtp, wp_mail, email, gmail, outgoing mail, privacy, security, sendmail, ssl, tls, wp-phpmailer, mail smtp, wp smtp
 Requires at least: 3.0
-Tested up to: 3.6
-Stable tag: 1.0.5
+Tested up to: 3.7
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,10 @@ For screenshots please visit the [Easy WordPress SMTP](http://wp-ecommerce.net/e
 
 * "Reply-To" text will no longer be added to the email header
 * From Name field can now contain quotes. It will no longer be converted to '\'
+
+= 1.0.6 =
+
+* Plugin is now compatible with WordPress 3.7
 
 == Upgrade Notice ==
 none

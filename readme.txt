@@ -3,8 +3,8 @@ Contributors: wpecommerce
 Donate link: http://wp-ecommerce.net/?p=2197
 Tags: mail, wordpress smtp, phpmailer, smtp, wp_mail, email, gmail, outgoing mail, privacy, security, sendmail, ssl, tls, wp-phpmailer, mail smtp, wp smtp
 Requires at least: 3.0
-Tested up to: 3.8
-Stable tag: 1.0.7
+Tested up to: 3.9
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,7 +37,6 @@ The general settings section consists of the following options
 * SMTP Authentication: No/Yes (This option should always be checked "Yes")
 * Username: The username that you use to login to your mail server
 * Password: The password that you use to login to your mail server
-* Enable Debug: Use this option if you are having issues with sending emails since it allows you to see the SMTP debug output on the screen.
 
 For detailed documentation on how you can configure these options please visit the [Easy WordPress SMTP](http://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197) plugin page
 
@@ -99,6 +98,10 @@ For screenshots please visit the [Easy WordPress SMTP](http://wp-ecommerce.net/e
 = 1.0.7 =
 
 * Plugin now works with WordPress 3.8
+
+= 1.0.8 =
+
+* Plugin now works with WordPress 3.9
 
 == Upgrade Notice ==
 none

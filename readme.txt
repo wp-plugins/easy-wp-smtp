@@ -109,4 +109,5 @@ Inspired by [WP Mail SMTP](http://wordpress.org/plugins/wp-mail-smtp/) plugin
 * Plugin now works with WordPress 3.9
 
 == Upgrade Notice ==
-none
+
+There were some major changes in version 1.0.8. So you will need to reconfigure the SMTP options after the upgrade.

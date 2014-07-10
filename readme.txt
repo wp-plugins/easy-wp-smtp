@@ -68,6 +68,11 @@ Yes.
 
 For screenshots please visit the [Easy WordPress SMTP](http://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197) plugin page
 
+== Other Notes ==
+
+Inspired by [WP Mail SMTP](http://wordpress.org/plugins/wp-mail-smtp/) plugin
+
+
 == Changelog ==
 
 = 1.0.1 =

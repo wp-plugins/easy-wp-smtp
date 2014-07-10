@@ -75,38 +75,38 @@ Inspired by [WP Mail SMTP](http://wordpress.org/plugins/wp-mail-smtp/) plugin
 
 == Changelog ==
 
-= 1.0.1 =
+= 1.0.8 =
 
-* First commit of the plugin
+* Plugin now works with WordPress 3.9
 
-= 1.0.2 =
+= 1.0.7 =
 
-* Fixed a bug where the debug output was being displayed on the front end
+* Plugin now works with WordPress 3.8
 
-= 1.0.3 =
+= 1.0.6 =
 
-* Added a new option to the settings which allows a user to enable/disable SMTP debug
-
-= 1.0.4 =
-
-* Plugin is now compatible with WordPress 3.6
+* Plugin is now compatible with WordPress 3.7
 
 = 1.0.5 =
 
 * "Reply-To" text will no longer be added to the email header
 * From Name field can now contain quotes. It will no longer be converted to '\'
 
-= 1.0.6 =
+= 1.0.4 =
 
-* Plugin is now compatible with WordPress 3.7
+* Plugin is now compatible with WordPress 3.6
 
-= 1.0.7 =
+= 1.0.3 =
 
-* Plugin now works with WordPress 3.8
+* Added a new option to the settings which allows a user to enable/disable SMTP debug
 
-= 1.0.8 =
+= 1.0.2 =
 
-* Plugin now works with WordPress 3.9
+* Fixed a bug where the debug output was being displayed on the front end
+
+= 1.0.1 =
+
+* First commit of the plugin
 
 == Upgrade Notice ==
 

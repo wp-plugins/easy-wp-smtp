@@ -272,6 +272,7 @@ if ( ! function_exists( 'swpsmtp_settings' ) ) {
 		<div class="swpsmtp-mail wrap" id="swpsmtp-mail">
 			<div id="icon-options-general" class="icon32 icon32-bws"></div>
 			<h2><?php _e( "Easy WP SMTP Settings", 'easy_wp_smtp' ); ?></h2>
+                        <div class="update-nag">Please visit the <a target="_blank" href="http://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197">Easy WP SMTP</a> documentation page for usage instructions.</div>
 			<div class="updated fade" <?php if( empty( $message ) ) echo "style=\"display:none\""; ?>>
 				<p><strong><?php echo $message; ?></strong></p>
 			</div>

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Easy WP SMTP
-Version: 1.0.8
+Version: 1.0.9
 Plugin URI: http://wp-ecommerce.net/?p=2197
 Author: wpecommerce
 Author URI: http://wp-ecommerce.net/
@@ -26,37 +26,12 @@ if ( ! function_exists( 'swpsmtp_admin_default_setup' ) ) {
  */
 if ( ! function_exists ( 'swpsmtp_admin_init' ) ) {
 	function swpsmtp_admin_init() {
-		global $swpsmtp_plugin_info;
 		/* Internationalization, first(!) */
 		load_plugin_textdomain( 'easy_wp_smtp', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-
-		if ( ! $swpsmtp_plugin_info )
-			$swpsmtp_plugin_info = get_plugin_data( __FILE__ );
-
-		/* check WordPress version */
-		swpsmtp_version_check();
 
 		if ( isset( $_REQUEST['page'] ) && 'swpsmtp_settings' == $_REQUEST['page'] ) {
 			/* register plugin settings */
 			swpsmtp_register_settings();
-		}
-	}
-}
-
-/**
- * Function check if plugin is compatible with current WP version
- * @return void
- */
-if ( ! function_exists ( 'swpsmtp_version_check' ) ) {
-	function swpsmtp_version_check() {
-		global $wp_version, $swpsmtp_plugin_info;
-		$require_wp		=	"3.5"; /* Wordpress at least requires version */
-		$plugin				=	plugin_basename( __FILE__ );
-	 	if ( version_compare( $wp_version, $require_wp, "<" ) ) {
-			if ( is_plugin_active( $plugin ) ) {
-				deactivate_plugins( $plugin );
-				wp_die( "<strong>" . $swpsmtp_plugin_info['Name'] . " </strong> " . __( 'requires', 'easy_wp_smtp' ) . " <strong>WordPress " . $require_wp . "</strong> " . __( 'or higher, that is why it has been deactivated! Please upgrade WordPress and try again.', 'easy_wp_smtp') . "<br /><br />" . __( 'Back to the WordPress', 'easy_wp_smtp') . " <a href='" . get_admin_url( null, 'plugins.php' ) . "'>" . __( 'Plugins page', 'easy_wp_smtp') . "</a>." );
-			}
 		}
 	}
 }
@@ -67,12 +42,7 @@ if ( ! function_exists ( 'swpsmtp_version_check' ) ) {
  */
 if ( ! function_exists( 'swpsmtp_register_settings' ) ) {
 	function swpsmtp_register_settings() {
-		global $wpmu, $wpdb, $swpsmtp_options, $swpsmtp_options_default, $swpsmtp_plugin_info;
-
-		$swpsmtp_plugin_info = get_plugin_data( __FILE__, false );
-
 		$swpsmtp_options_default = array(
-			'plugin_option_version' => $swpsmtp_plugin_info["Version"],
 			'from_email_field' 		=> '',
 			'from_name_field'   		=> '',
 			'smtp_settings'     		=> array( 
@@ -86,23 +56,9 @@ if ( ! function_exists( 'swpsmtp_register_settings' ) ) {
 		);
 
 		/* install the default plugin options */
-		if ( 1 == $wpmu ) {
-			if ( ! get_site_option( 'swpsmtp_options' ) )
-				add_site_option( 'swpsmtp_options', $swpsmtp_options_default, '', 'yes' );
-		} else {
-			if ( ! get_option( 'swpsmtp_options' ) )
-				add_option( 'swpsmtp_options', $swpsmtp_options_default, '', 'yes' );
-		}
-
-		/* get plugin options from the database */
-		$swpsmtp_options = is_multisite() ? get_site_option( 'swpsmtp_options' ) : get_option( 'swpsmtp_options' );
-                //$swpsmtp_options = get_option( 'swpsmtp_options' );
-		
-		if ( $swpsmtp_options['plugin_option_version'] != $swpsmtp_plugin_info["Version"] ) {
-			$swpsmtp_options = array_merge( $swpsmtp_options_default, $swpsmtp_options );
-			$swpsmtp_options['plugin_option_version'] = $swpsmtp_plugin_info["Version"];
-			update_option( 'swpsmtp_options', $swpsmtp_options );
-		}
+                if ( ! get_option( 'swpsmtp_options' ) ){
+                    add_option( 'swpsmtp_options', $swpsmtp_options_default, '', 'yes' );
+                }
 	}
 }
 
@@ -164,21 +120,15 @@ if ( ! function_exists ( 'swpsmtp_admin_head' ) ) {
  * @return void
  */
 if ( ! function_exists ( 'swpsmtp_init_smtp' ) ) {
-	function swpsmtp_init_smtp( $phpmailer ) { 
-		global $wpmu, $swpsmtp_options;
+	function swpsmtp_init_smtp( $phpmailer ) {
 
-		if ( empty( $swpsmtp_options ) ) {
-			$swpsmtp_options = ( 1 == $wpmu ) ? get_site_option( 'swpsmtp_options' ) : get_option( 'swpsmtp_options' );
-		}
-
-		/* Check that mailer is not blank, and if mailer=smtp, host is not blank */
-		if ( $swpsmtp_options['smtp_settings']['host'] == '' ) {
-			return;
-		}
+		$swpsmtp_options = get_option( 'swpsmtp_options' );
 		
 		/* Set the mailer type as per config above, this overrides the already called isMail method */
 		$phpmailer->IsSMTP();
-		
+		$from_email = $swpsmtp_options['from_email_field'];
+                $from_name  = $swpsmtp_options['from_name_field'];
+                $phpmailer->SetFrom( $from_email, $from_name );
 		/* Set the SMTPSecure value */
 		if ( $swpsmtp_options['smtp_settings']['type_encryption'] !== 'none' ) {
 			$phpmailer->SMTPSecure = $swpsmtp_options['smtp_settings']['type_encryption'];
@@ -203,13 +153,10 @@ if ( ! function_exists ( 'swpsmtp_init_smtp' ) ) {
  */
 if ( ! function_exists( 'swpsmtp_settings' ) ) {
 	function swpsmtp_settings() {
-		global $wp_version, $wpdb, $wpmu, $swpsmtp_options, $swpsmtp_options_default, $title, $swpsmtp_plugin_info;
 		$display_add_options = $message = $error = $result = '';
 
-		if ( empty( $swpsmtp_options ) ) {
-			$swpsmtp_options = ( 1 == $wpmu ) ? get_site_option( 'swpsmtp_options' ) : get_option( 'swpsmtp_options' );
-		}
-
+		$swpsmtp_options = get_option( 'swpsmtp_options' );
+                
 		if ( isset( $_POST['swpsmtp_form_submit'] ) && check_admin_referer( plugin_basename( __FILE__ ), 'swpsmtp_nonce_name' ) ) {	
 			/* Update settings */
 			$swpsmtp_options['from_name_field'] = isset( $_POST['swpsmtp_from_name'] ) ? $_POST['swpsmtp_from_name'] : '';
@@ -236,17 +183,11 @@ if ( ! function_exists( 'swpsmtp_settings' ) ) {
 				} else {
 					$swpsmtp_options['smtp_settings']['port'] = $_POST['swpsmtp_smtp_port'];
 				}
-			} else {
-				$swpsmtp_options['smtp_settings']['port'] = $swpsmtp_options_default['smtp_settings']['port'];
 			}
 
 			/* Update settings in the database */
 			if ( empty( $error ) ) {
-				if ( is_multisite() ) {
-					update_site_option( 'swpsmtp_options', $swpsmtp_options );
-				} else {
-					update_option( 'swpsmtp_options', $swpsmtp_options );
-				}
+				update_option( 'swpsmtp_options', $swpsmtp_options );
 				$message .= __( "Settings saved.", 'easy_wp_smtp' );	
 			}
 			else{
@@ -396,11 +337,9 @@ if ( ! function_exists( 'swpsmtp_settings' ) ) {
  */
 if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 	function swpsmtp_test_mail( $to_email, $subject, $message ) {
-		global $swpsmtp_options, $wpmu;
 		$errors = '';
 
-		if( empty( $swpsmtp_options ) )
-			$swpsmtp_options = ( 1 == $wpmu ) ? get_site_option( 'swpsmtp_options' ) : get_option( 'swpsmtp_options' );
+		$swpsmtp_options = get_option( 'swpsmtp_options' );
 
 		require_once( ABSPATH . WPINC . '/class-phpmailer.php' );
 		$mail = new PHPMailer();
@@ -431,7 +370,7 @@ if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 		$mail->MsgHTML( $message );
 		$mail->AddAddress( $to_email );
 		$mail->SMTPDebug = 0;
-		
+
 		/* Send mail and return result */
 		if ( ! $mail->Send() )
 			$errors = $mail->ErrorInfo;
@@ -454,8 +393,6 @@ if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
  */
 if ( ! function_exists( 'swpsmtp_send_uninstall' ) ) {
 	function swpsmtp_send_uninstall() {
-		global $wpdb;
-
 		/* delete plugin options */
 		delete_site_option( 'swpsmtp_options' );
 		delete_option( 'swpsmtp_options' );

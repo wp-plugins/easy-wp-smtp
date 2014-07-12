@@ -1,7 +1,7 @@
 === Easy WP SMTP ===
 Contributors: wpecommerce
 Donate link: http://wp-ecommerce.net/?p=2197
-Tags: mail, wordpress smtp, phpmailer, smtp, wp_mail, email, gmail, outgoing mail, privacy, security, sendmail, ssl, tls, wp-phpmailer, mail smtp, wp smtp
+Tags: mail, wordpress smtp, phpmailer, smtp, wp_mail, email, gmail, outgoing mail, privacy, security, sendmail, ssl, tls, wp-phpmailer, mail smtp, wp smtp 
 Requires at least: 3.0
 Tested up to: 3.9
 Stable tag: 1.0.9

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Easy WP SMTP
-Version: 1.0.9
+Version: 1.1.0
 Plugin URI: http://wp-ecommerce.net/?p=2197
 Author: wpecommerce
 Author URI: http://wp-ecommerce.net/
@@ -382,7 +382,7 @@ if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 			return $errors;
 		}
 		else{
-			return 'Test mail was sended';
+			return 'Test mail was sent';
 		}
 	}
 }

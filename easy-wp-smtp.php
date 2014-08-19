@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Easy WP SMTP
-Version: 1.1.0
+Version: 1.1.1
 Plugin URI: http://wp-ecommerce.net/?p=2197
 Author: wpecommerce
 Author URI: http://wp-ecommerce.net/
@@ -316,7 +316,7 @@ if ( ! function_exists( 'swpsmtp_settings' ) ) {
 					<tr valign="top">
 						<th scope="row"><?php _e( "Message", 'easy_wp_smtp' ); ?>:</th>
 						<td>
-							<textarea name="swpsmtp_message" rows="5"></textarea><br />
+							<textarea name="swpsmtp_message" id="swpsmtp_message" rows="5"></textarea><br />
 							<span  class="swpsmtp_info"><?php _e( "Write your message", 'easy_wp_smtp' ); ?></span>
 						</td>
 					</tr>				

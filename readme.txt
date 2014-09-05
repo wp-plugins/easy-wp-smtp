@@ -1,9 +1,9 @@
 === Easy WP SMTP ===
 Contributors: wpecommerce
-Donate link: http://wp-ecommerce.net/?p=2197
+Donate link: https://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197
 Tags: mail, wordpress smtp, phpmailer, smtp, wp_mail, email, gmail, outgoing mail, privacy, security, sendmail, ssl, tls, wp-phpmailer, mail smtp, wp smtp 
 Requires at least: 3.0
-Tested up to: 3.9
+Tested up to: 4.0
 Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -38,7 +38,7 @@ The general settings section consists of the following options
 * Username: The username that you use to login to your mail server
 * Password: The password that you use to login to your mail server
 
-For detailed documentation on how you can configure these options please visit the [Easy WordPress SMTP](http://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197) plugin page
+For detailed documentation on how you can configure these options please visit the [Easy WordPress SMTP](https://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197) plugin page
 
 **b)** Easy WP SMTP Testing & Debugging Settings
 
@@ -66,7 +66,7 @@ Yes.
 
 == Screenshots ==
 
-For screenshots please visit the [Easy WordPress SMTP](http://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197) plugin page
+For screenshots please visit the [Easy WordPress SMTP](https://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197) plugin page
 
 == Other Notes ==
 

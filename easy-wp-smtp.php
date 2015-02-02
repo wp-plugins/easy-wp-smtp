@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Easy WP SMTP
-Version: 1.1.1
+Version: 1.1.2
 Plugin URI: https://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197
 Author: wpecommerce
 Author URI: https://wp-ecommerce.net/
@@ -123,12 +123,35 @@ if ( ! function_exists ( 'swpsmtp_init_smtp' ) ) {
 	function swpsmtp_init_smtp( $phpmailer ) {
 
 		$swpsmtp_options = get_option( 'swpsmtp_options' );
-		
 		/* Set the mailer type as per config above, this overrides the already called isMail method */
 		$phpmailer->IsSMTP();
 		$from_email = $swpsmtp_options['from_email_field'];
+                if(isset($phpmailer->From)){
+                    if(empty($phpmailer->From)){
+                        $phpmailer->From = $from_email;
+                    }
+                }
+                else{
+                    $phpmailer->From = $from_email;
+                }
                 $from_name  = $swpsmtp_options['from_name_field'];
-                $phpmailer->SetFrom( $from_email, $from_name );
+                if(isset($phpmailer->FromName)){
+                    if(empty($phpmailer->FromName)){
+                        $phpmailer->FromName = $from_name;
+                    }
+                }
+                else{
+                    $phpmailer->FromName = $from_name;
+                }
+                $phpmailer->SetFrom($phpmailer->From, $phpmailer->FromName);
+                if(isset($phpmailer->ReplyTo)){
+                    if(empty($phpmailer->ReplyTo)){
+                        $phpmailer->addReplyTo($phpmailer->From, $phpmailer->FromName);
+                    }
+                }
+                else{
+                    $phpmailer->addReplyTo($phpmailer->From, $phpmailer->FromName);
+                }
 		/* Set the SMTPSecure value */
 		if ( $swpsmtp_options['smtp_settings']['type_encryption'] !== 'none' ) {
 			$phpmailer->SMTPSecure = $swpsmtp_options['smtp_settings']['type_encryption'];

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Easy WP SMTP
-Version: 1.1.3
+Version: 1.1.4
 Plugin URI: https://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197
 Author: wpecommerce
 Author URI: https://wp-ecommerce.net/
@@ -129,6 +129,9 @@ if ( ! function_exists ( 'swpsmtp_init_smtp' ) ) {
                     if(empty($phpmailer->From)){
                         $phpmailer->From = $from_email;
                     }
+                    else if(strpos($phpmailer->From, 'wordpress@') !== false){
+                        $phpmailer->From = $from_email;
+                    }
                 }
                 else{
                     $phpmailer->From = $from_email;
@@ -136,6 +139,9 @@ if ( ! function_exists ( 'swpsmtp_init_smtp' ) ) {
                 $from_name  = $swpsmtp_options['from_name_field'];
                 if(isset($phpmailer->FromName)){
                     if(empty($phpmailer->FromName)){
+                        $phpmailer->FromName = $from_name;
+                    }
+                    else if(strpos($phpmailer->FromName, 'WordPress') !== false){
                         $phpmailer->FromName = $from_name;
                     }
                 }

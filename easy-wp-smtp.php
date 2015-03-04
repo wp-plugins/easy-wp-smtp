@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Easy WP SMTP
-Version: 1.1.4
+Version: 1.1.5
 Plugin URI: https://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197
 Author: wpecommerce
 Author URI: https://wp-ecommerce.net/
@@ -162,7 +162,7 @@ if ( ! function_exists ( 'swpsmtp_init_smtp' ) ) {
 		if( 'yes' == $swpsmtp_options['smtp_settings']['autentication'] ){
 			$phpmailer->SMTPAuth = true;
 			$phpmailer->Username = $swpsmtp_options['smtp_settings']['username'];
-			$phpmailer->Password = $swpsmtp_options['smtp_settings']['password'];
+			$phpmailer->Password = swpsmtp_get_password();
 		}
 	}
 }
@@ -189,11 +189,12 @@ if ( ! function_exists( 'swpsmtp_settings' ) ) {
 				}
 			}
 					
-			$swpsmtp_options['smtp_settings']['host']     				= $_POST['swpsmtp_smtp_host'];
+			$swpsmtp_options['smtp_settings']['host']     				= trim($_POST['swpsmtp_smtp_host']);
 			$swpsmtp_options['smtp_settings']['type_encryption'] = ( isset( $_POST['swpsmtp_smtp_type_encryption'] ) ) ? $_POST['swpsmtp_smtp_type_encryption'] : 'none' ;
 			$swpsmtp_options['smtp_settings']['autentication']   = ( isset( $_POST['swpsmtp_smtp_autentication'] ) ) ? $_POST['swpsmtp_smtp_autentication'] : 'yes' ;
-			$swpsmtp_options['smtp_settings']['username']  			= $_POST['swpsmtp_smtp_username'];
-			$swpsmtp_options['smtp_settings']['password'] 				= $_POST['swpsmtp_smtp_password'];
+			$swpsmtp_options['smtp_settings']['username']  			= trim($_POST['swpsmtp_smtp_username']);
+                        $smtp_password = trim($_POST['swpsmtp_smtp_password']);
+			$swpsmtp_options['smtp_settings']['password'] 				= base64_encode($smtp_password);
 
 			/* Check value from "SMTP port" option */
 			if ( isset( $_POST['swpsmtp_smtp_port'] ) ) {
@@ -284,7 +285,7 @@ if ( ! function_exists( 'swpsmtp_settings' ) ) {
 						</td>
 					</tr>
 					<tr class="ad_opt swpsmtp_smtp_options">
-						<th><?php _e( 'SMTP Autentication', 'easy_wp_smtp' ); ?></th>
+						<th><?php _e( 'SMTP Authentication', 'easy_wp_smtp' ); ?></th>
 						<td>
 							<label for="swpsmtp_smtp_autentication"><input type="radio" id="swpsmtp_smtp_autentication" name="swpsmtp_smtp_autentication" value='no' <?php if( 'no' == $swpsmtp_options['smtp_settings']['autentication'] ) echo 'checked="checked"'; ?> /> <?php _e( 'No', 'easy_wp_smtp' ); ?></label>
 							<label for="swpsmtp_smtp_autentication"><input type="radio" id="swpsmtp_smtp_autentication" name="swpsmtp_smtp_autentication" value='yes' <?php if( 'yes' == $swpsmtp_options['smtp_settings']['autentication'] ) echo 'checked="checked"'; ?> /> <?php _e( 'Yes', 'easy_wp_smtp' ); ?></label><br />
@@ -301,7 +302,7 @@ if ( ! function_exists( 'swpsmtp_settings' ) ) {
 					<tr class="ad_opt swpsmtp_smtp_options">
 						<th><?php _e( 'SMTP Password', 'easy_wp_smtp' ); ?></th>
 						<td>
-							<input type='password' name='swpsmtp_smtp_password' value='<?php echo $swpsmtp_options['smtp_settings']['password']; ?>' /><br />
+							<input type='password' name='swpsmtp_smtp_password' value='<?php echo swpsmtp_get_password(); ?>' /><br />
 							<span class="swpsmtp_info"><?php _e( "The password to login to your mail server", 'easy_wp_smtp' ); ?></span>
 						</td>
 					</tr>
@@ -373,7 +374,7 @@ if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 		if( 'yes' == $swpsmtp_options['smtp_settings']['autentication'] ){
 			$mail->SMTPAuth = true;
 			$mail->Username = $swpsmtp_options['smtp_settings']['username'];
-			$mail->Password = $swpsmtp_options['smtp_settings']['password'];
+			$mail->Password = swpsmtp_get_password();
 		}
 		
 		/* Set the SMTPSecure value, if set to none, leave this blank */
@@ -416,6 +417,21 @@ if ( ! function_exists( 'swpsmtp_send_uninstall' ) ) {
 		/* delete plugin options */
 		delete_site_option( 'swpsmtp_options' );
 		delete_option( 'swpsmtp_options' );
+	}
+}
+
+if ( ! function_exists( 'swpsmtp_get_password' ) ) {
+	function swpsmtp_get_password() {
+            $swpsmtp_options = get_option( 'swpsmtp_options' );
+            $temp_password = $swpsmtp_options['smtp_settings']['password'];
+            $password = "";
+            if (base64_encode(base64_decode($temp_password)) === $temp_password) {  //encoded
+                $password = base64_decode($temp_password); 
+            }
+            else{ //not encoded
+                $password = $temp_password;
+            }
+            return $password;
 	}
 }
 

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Easy WP SMTP
-Version: 1.1.5
+Version: 1.1.6
 Plugin URI: https://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197
 Author: wpecommerce
 Author URI: https://wp-ecommerce.net/
@@ -125,29 +125,9 @@ if ( ! function_exists ( 'swpsmtp_init_smtp' ) ) {
 		/* Set the mailer type as per config above, this overrides the already called isMail method */
 		$phpmailer->IsSMTP();
 		$from_email = $swpsmtp_options['from_email_field'];
-                if(isset($phpmailer->From)){
-                    if(empty($phpmailer->From)){
-                        $phpmailer->From = $from_email;
-                    }
-                    else if(strpos($phpmailer->From, 'wordpress@') !== false){
-                        $phpmailer->From = $from_email;
-                    }
-                }
-                else{
-                    $phpmailer->From = $from_email;
-                }
+                $phpmailer->From = $from_email;
                 $from_name  = $swpsmtp_options['from_name_field'];
-                if(isset($phpmailer->FromName)){
-                    if(empty($phpmailer->FromName)){
-                        $phpmailer->FromName = $from_name;
-                    }
-                    else if(strpos($phpmailer->FromName, 'WordPress') !== false){
-                        $phpmailer->FromName = $from_name;
-                    }
-                }
-                else{
-                    $phpmailer->FromName = $from_name;
-                }
+                $phpmailer->FromName = $from_name;
                 $phpmailer->SetFrom($phpmailer->From, $phpmailer->FromName);
 		/* Set the SMTPSecure value */
 		if ( $swpsmtp_options['smtp_settings']['type_encryption'] !== 'none' ) {
@@ -365,7 +345,7 @@ if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 		require_once( ABSPATH . WPINC . '/class-phpmailer.php' );
 		$mail = new PHPMailer();
 		
-		$from_name  = $swpsmtp_options['from_name_field'];
+		$from_name  = utf8_decode($swpsmtp_options['from_name_field']);
 		$from_email = $swpsmtp_options['from_email_field']; 
 		
 		$mail->IsSMTP();
@@ -387,7 +367,7 @@ if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 		$mail->Port = $swpsmtp_options['smtp_settings']['port']; 
 		$mail->SetFrom( $from_email, $from_name );
 		$mail->isHTML( true );
-		$mail->Subject = $subject;
+		$mail->Subject = utf8_decode($subject);
 		$mail->MsgHTML( $message );
 		$mail->AddAddress( $to_email );
 		$mail->SMTPDebug = 0;

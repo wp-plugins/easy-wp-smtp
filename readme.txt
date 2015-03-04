@@ -77,7 +77,7 @@ Inspired by [WP Mail SMTP](http://wordpress.org/plugins/wp-mail-smtp/) plugin
 
 = 1.1.5 =
 
-* Fixed a type in the plugin settings
+* Fixed a typo in the plugin settings
 * SMTP Password is now encoded before saving it to the wp_options table
 
 = 1.1.4 =

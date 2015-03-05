@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Easy WP SMTP
-Version: 1.1.6
+Version: 1.1.7
 Plugin URI: https://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197
 Author: wpecommerce
 Author URI: https://wp-ecommerce.net/
@@ -405,8 +405,14 @@ if ( ! function_exists( 'swpsmtp_get_password' ) ) {
             $swpsmtp_options = get_option( 'swpsmtp_options' );
             $temp_password = $swpsmtp_options['smtp_settings']['password'];
             $password = "";
-            if (base64_encode(base64_decode($temp_password)) === $temp_password) {  //encoded
-                $password = base64_decode($temp_password); 
+            $decoded_pass = base64_decode($temp_password);
+            if (base64_encode($decoded_pass) === $temp_password) {  //it might be encoded
+                if(false === mb_detect_encoding($decoded_pass)){  //could not find character encoding.
+                    $password = $temp_password;
+                }
+                else{
+                    $password = base64_decode($temp_password); 
+                }               
             }
             else{ //not encoded
                 $password = $temp_password;

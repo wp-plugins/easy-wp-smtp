@@ -345,7 +345,7 @@ if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 		require_once( ABSPATH . WPINC . '/class-phpmailer.php' );
 		$mail = new PHPMailer();
 		
-		$from_name  = utf8_decode($swpsmtp_options['from_name_field']);
+		$from_name  = $swpsmtp_options['from_name_field'];
 		$from_email = $swpsmtp_options['from_email_field']; 
 		
 		$mail->IsSMTP();
@@ -367,7 +367,8 @@ if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 		$mail->Port = $swpsmtp_options['smtp_settings']['port']; 
 		$mail->SetFrom( $from_email, $from_name );
 		$mail->isHTML( true );
-		$mail->Subject = utf8_decode($subject);
+		$mail->CharSet = "utf-8"; 
+		$mail->Subject = $subject;
 		$mail->MsgHTML( $message );
 		$mail->AddAddress( $to_email );
 		$mail->SMTPDebug = 0;

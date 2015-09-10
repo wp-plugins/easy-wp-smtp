@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Easy WP SMTP
-Version: 1.1.9
+Version: 1.2.0
 Plugin URI: https://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197
 Author: wpecommerce
 Author URI: https://wp-ecommerce.net/
@@ -344,8 +344,11 @@ if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 
 		require_once( ABSPATH . WPINC . '/class-phpmailer.php' );
 		$mail = new PHPMailer();
-		
-		$from_name  = utf8_decode($swpsmtp_options['from_name_field']);
+                
+                $charset = get_bloginfo( 'charset' );
+		$mail->CharSet = $charset;
+                
+		$from_name  = $swpsmtp_options['from_name_field'];
 		$from_email = $swpsmtp_options['from_email_field']; 
 		
 		$mail->IsSMTP();
@@ -367,7 +370,7 @@ if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 		$mail->Port = $swpsmtp_options['smtp_settings']['port']; 
 		$mail->SetFrom( $from_email, $from_name );
 		$mail->isHTML( true );
-		$mail->Subject = utf8_decode($subject);
+		$mail->Subject = $subject;
 		$mail->MsgHTML( $message );
 		$mail->AddAddress( $to_email );
 		$mail->SMTPDebug = 0;
@@ -406,6 +409,11 @@ if ( ! function_exists( 'swpsmtp_get_password' ) ) {
             $temp_password = $swpsmtp_options['smtp_settings']['password'];
             $password = "";
             $decoded_pass = base64_decode($temp_password);
+            /* no additional checks for servers that aren't configured with mbstring enabled */
+            if ( ! function_exists( 'mb_detect_encoding' ) ){
+                return $decoded_pass;
+            }
+            /* end of mbstring check */
             if (base64_encode($decoded_pass) === $temp_password) {  //it might be encoded
                 if(false === mb_detect_encoding($decoded_pass)){  //could not find character encoding.
                     $password = $temp_password;

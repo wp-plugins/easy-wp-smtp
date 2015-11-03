@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Easy WP SMTP
-Version: 1.2.0
+Version: 1.2.1
 Plugin URI: https://wp-ecommerce.net/easy-wordpress-smtp-send-emails-from-your-wordpress-site-using-a-smtp-server-2197
 Author: wpecommerce
 Author URI: https://wp-ecommerce.net/
@@ -120,7 +120,11 @@ if ( ! function_exists ( 'swpsmtp_admin_head' ) ) {
  * @return void
  */
 if ( ! function_exists ( 'swpsmtp_init_smtp' ) ) {
-	function swpsmtp_init_smtp( $phpmailer ) {              
+	function swpsmtp_init_smtp( $phpmailer ) {
+                //check if SMTP credentials have been configured.
+                if(!swpsmtp_credentials_configured()){
+                    return;
+                }
 		$swpsmtp_options = get_option( 'swpsmtp_options' );
 		/* Set the mailer type as per config above, this overrides the already called isMail method */
 		$phpmailer->IsSMTP();
@@ -144,6 +148,8 @@ if ( ! function_exists ( 'swpsmtp_init_smtp' ) ) {
 			$phpmailer->Username = $swpsmtp_options['smtp_settings']['username'];
 			$phpmailer->Password = swpsmtp_get_password();
 		}
+                //PHPMailer 5.2.10 introduced this option. However, this might cause issues if the server is advertising TLS with an invalid certificate.
+                $phpmailer->SMTPAutoTLS = false;
 	}
 }
 
@@ -338,6 +344,9 @@ if ( ! function_exists( 'swpsmtp_settings' ) ) {
  */
 if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 	function swpsmtp_test_mail( $to_email, $subject, $message ) {
+                if(!swpsmtp_credentials_configured()){
+                    return;
+                }
 		$errors = '';
 
 		$swpsmtp_options = get_option( 'swpsmtp_options' );
@@ -364,6 +373,9 @@ if ( ! function_exists( 'swpsmtp_test_mail' ) ) {
 		if ( $swpsmtp_options['smtp_settings']['type_encryption'] !== 'none' ) {
 			$mail->SMTPSecure = $swpsmtp_options['smtp_settings']['type_encryption'];
 		}
+                
+                /* PHPMailer 5.2.10 introduced this option. However, this might cause issues if the server is advertising TLS with an invalid certificate. */
+                $mail->SMTPAutoTLS = false;
 		
 		/* Set the other options */
 		$mail->Host = $swpsmtp_options['smtp_settings']['host'];
@@ -429,6 +441,32 @@ if ( ! function_exists( 'swpsmtp_get_password' ) ) {
 	}
 }
 
+if ( ! function_exists( 'swpsmtp_admin_notice' ) ) {
+    function swpsmtp_admin_notice() {        
+        if(!swpsmtp_credentials_configured()){
+            ?>
+            <div class="error">
+                <p><?php _e( 'Please configure your SMTP credentials in the settings in order to send email using Easy WP SMTP plugin.', 'easy-wp-smtp' ); ?></p>
+            </div>
+            <?php
+        }
+    }
+}
+
+if ( ! function_exists( 'swpsmtp_credentials_configured' ) ) {
+    function swpsmtp_credentials_configured() {
+        $swpsmtp_options = get_option( 'swpsmtp_options' );
+        $credentials_configured = true;
+        if(!isset($swpsmtp_options['from_email_field']) || empty($swpsmtp_options['from_email_field'])){
+            $credentials_configured = false;
+        }
+        if(!isset($swpsmtp_options['from_name_field']) || empty($swpsmtp_options['from_name_field'])){
+            $credentials_configured = false;;
+        }
+        return $credentials_configured;
+    }
+}
+
 
 /**
  * Add all hooks
@@ -443,5 +481,6 @@ add_action( 'admin_menu', 'swpsmtp_admin_default_setup' );
 
 add_action( 'admin_init', 'swpsmtp_admin_init' );
 add_action( 'admin_enqueue_scripts', 'swpsmtp_admin_head' );
+add_action( 'admin_notices', 'swpsmtp_admin_notice' );
 
 register_uninstall_hook( plugin_basename( __FILE__ ), 'swpsmtp_send_uninstall' );
